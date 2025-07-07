@@ -27,23 +27,28 @@ Es ideal para tareas de:
 ```bash
 git clone https://github.com/AlejandroToloza/gcloud-automation-tools.git
 ```
-    Instala los requisitos (si no lo has hecho):
+
+Instala los requisitos (si no lo has hecho):
+
 ```bash
 pip install -r requirements.txt
 ```
-    Ejecuta el script desde consola:
+
+Ejecuta el script desde consola:
+
 ```bash
 python scripts/export_all_users/export_all_users.py
 ```
-    Ingresa los siguientes datos cuando se te solicite:
 
-    🔸 Número de región (selección de lista)
+## Ingresa los siguientes datos cuando se te solicite:
 
-    🔸 Client ID
+🔸 Número de región (selección de lista)
 
-    🔸 Client Secret (entrada segura oculta)
+🔸 Client ID
 
-    El archivo se guardará automáticamente en tu escritorio, en la ruta:
+🔸 Client Secret (entrada segura oculta)
+
+## El archivo se guardará automáticamente en tu escritorio, en la ruta:
 
 **Escritorio/PYTHON/EXPORTS/usuarios_genesys_YYYYMMDD_HHMMSS.xlsx**
 
