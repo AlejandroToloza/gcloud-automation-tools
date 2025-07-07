@@ -53,22 +53,24 @@ python scripts/export_all_users/export_all_users.py
 **Escritorio/PYTHON/EXPORTS/usuarios_genesys_YYYYMMDD_HHMMSS.xlsx**
 
 ## 🌍 Regiones disponibles
-**Número	Región	Dominio de API**
-1	🇺🇸 Estados Unidos (Este)	api.mypurecloud.com
-2	🇺🇸 Estados Unidos (Oeste)	api.usw2.pure.cloud
-3	🇨🇦 Canadá	api.cac1.pure.cloud
-4	🇧🇷 Brasil (São Paulo)	api.sae1.pure.cloud
-5	🇮🇪 Irlanda (Dublín)	api.mypurecloud.ie
-6	🇩🇪 Alemania (Fráncfort)	api.mypurecloud.de
-7	🇯🇵 Japón (Tokio)	api.mypurecloud.jp
-8	🇦🇺 Australia (Sydney)	api.mypurecloud.com.au
+
+| Nº | Región                    | Dominio de API              |
+|----|---------------------------|------------------------------|
+| 1  | 🇺🇸 Estados Unidos (Este)  | `api.mypurecloud.com`        |
+| 2  | 🇺🇸 Estados Unidos (Oeste) | `api.usw2.pure.cloud`        |
+| 3  | 🇨🇦 Canadá                 | `api.cac1.pure.cloud`        |
+| 4  | 🇧🇷 Brasil (São Paulo)     | `api.sae1.pure.cloud`        |
+| 5  | 🇮🇪 Irlanda (Dublín)       | `api.mypurecloud.ie`         |
+| 6  | 🇩🇪 Alemania (Fráncfort)   | `api.mypurecloud.de`         |
+| 7  | 🇯🇵 Japón (Tokio)          | `api.mypurecloud.jp`         |
+| 8  | 🇦🇺 Australia (Sydney)     | `api.mypurecloud.com.au`     |
 
 ## 🔗 Consulta oficial:
 **Genesys Cloud Domain Names**
 https://es-help.mypurecloud.com/articles/change-the-region-of-your-genesys-cloud-organization/#tab2
 
 ## 📦 Estructura del archivo Excel generado
-ID	Nombre	Email	Título	Estado	Departamento	División
+| ID | Nombre | Email | Título | Estado | Departamento | División |
 
 > Los datos se exportan limpios y organizados para facilitar análisis posteriores.
 
