@@ -13,7 +13,7 @@ Bienvenido a `gcloud-automation-tools`, una colección de scripts y herramientas
 | [Export all users](./scripts/export_all_users/README.md) | Exporta todos los usuarios activos e inactivos a un archivo Excel. | ✅ Disponible |
 | [Colas tipo y script](./scripts/colas_tipo_y_script/README.md) | Extrae todas las colas de la organización, su tipo, nombre del script, ID de la cola y del script. | 🔜 En desarrollo |
 | [Miembros por cola](./scripts/miembros_por_cola/README.md) | Lista todas las colas existentes junto con sus respectivos miembros. | 🔜 En desarrollo |
-| [Total contacts externals](./scripts/total_contacts_externals/README.md) | Devuelve el total de contactos externos creados en la organización. | 🔜 En desarrollo |
+| [Total contacts externals](./scripts/total_contacts_externals/README.md) | Devuelve el total de contactos externos creados en la organización. | ✅ Disponible |
 | [Agentes por roles](./scripts/agentes_por_roles/README.md) | Muestra los agentes agrupados por rol, junto con el ID de cada rol. | 🔜 En desarrollo |
 
 ---
