@@ -68,9 +68,9 @@ python scripts/export_all_users/export_all_users.py
 https://es-help.mypurecloud.com/articles/change-the-region-of-your-genesys-cloud-organization/#tab2
 
 ## 📦 Estructura del archivo Excel generado
-**ID	Nombre	Email	Título	Estado	Departamento	División**
+ID	Nombre	Email	Título	Estado	Departamento	División
 
-    Los datos se exportan limpios y organizados para facilitar análisis posteriores.
+> Los datos se exportan limpios y organizados para facilitar análisis posteriores.
 
 ## 🧑‍💻 Autor
 
