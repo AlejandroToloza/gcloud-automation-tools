@@ -26,15 +26,15 @@ Es ideal para tareas de:
 
 ```bash
 git clone https://github.com/AlejandroToloza/gcloud-automation-tools.git
-
+```
     Instala los requisitos (si no lo has hecho):
-
+```bash
 pip install -r requirements.txt
-
+```
     Ejecuta el script desde consola:
-
+```bash
 python scripts/export_all_users/export_all_users.py
-
+```
     Ingresa los siguientes datos cuando se te solicite:
 
     🔸 Número de región (selección de lista)
@@ -45,10 +45,10 @@ python scripts/export_all_users/export_all_users.py
 
     El archivo se guardará automáticamente en tu escritorio, en la ruta:
 
-Escritorio/PYTHON/EXPORTS/usuarios_genesys_YYYYMMDD_HHMMSS.xlsx
+**Escritorio/PYTHON/EXPORTS/usuarios_genesys_YYYYMMDD_HHMMSS.xlsx**
 
-🌍 Regiones disponibles
-Número	Región	Dominio de API
+## 🌍 Regiones disponibles
+**Número	Región	Dominio de API**
 1	🇺🇸 Estados Unidos (Este)	api.mypurecloud.com
 2	🇺🇸 Estados Unidos (Oeste)	api.usw2.pure.cloud
 3	🇨🇦 Canadá	api.cac1.pure.cloud
@@ -58,26 +58,29 @@ Número	Región	Dominio de API
 7	🇯🇵 Japón (Tokio)	api.mypurecloud.jp
 8	🇦🇺 Australia (Sydney)	api.mypurecloud.com.au
 
-🔗 Consulta oficial:
-Genesys Cloud Domain Names
-📦 Estructura del archivo Excel generado
-ID	Nombre	Email	Título	Estado	Departamento	División
+## 🔗 Consulta oficial:
+**Genesys Cloud Domain Names**
+https://es-help.mypurecloud.com/articles/change-the-region-of-your-genesys-cloud-organization/#tab2
+
+## 📦 Estructura del archivo Excel generado
+**ID	Nombre	Email	Título	Estado	Departamento	División**
 
     Los datos se exportan limpios y organizados para facilitar análisis posteriores.
 
-🧑‍💻 Autor
+## 🧑‍💻 Autor
 
-Arley Alejandro Toloza Martínez
+**Arley Alejandro Toloza Martínez**
 Ingeniero de Sistemas especializado en automatización con Python y Genesys Cloud.
 🔗 [LinkedIn](https://www.linkedin.com/in/alejandrotoloza)  
 🔗 [GitHub](https://github.com/AlejandroToloza)
-🤝 ¿Quieres contribuir?
+
+## 🤝 ¿Quieres contribuir?
 
 ¡Bienvenido! Puedes proponer mejoras, reportar errores o crear un pull request.
-⚖️ Licencia
+## ⚖️ Licencia
 
 Este proyecto está bajo licencia MIT.
 Puedes usarlo, modificarlo y distribuirlo libremente, siempre dando el debido crédito.
 
-🎯 ¿Te fue útil?
+## 🎯 ¿Te fue útil?
 Dale una ⭐ al repositorio y comparte con tu equipo o red. ¡Automatizar es avanzar!
