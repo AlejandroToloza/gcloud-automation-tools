@@ -76,7 +76,7 @@ https://es-help.mypurecloud.com/articles/change-the-region-of-your-genesys-cloud
 
 ## 🧑‍💻 Autor
 
-**Arley Alejandro Toloza Martínez**
+Arley Alejandro Toloza Martínez
 Ingeniero de Sistemas especializado en automatización con Python y Genesys Cloud.
 🔗 [LinkedIn](https://www.linkedin.com/in/alejandrotoloza)  
 🔗 [GitHub](https://github.com/AlejandroToloza)
