@@ -69,8 +69,8 @@ ID	Nombre	Email	Título	Estado	Departamento	División
 
 Arley Alejandro Toloza Martínez
 Ingeniero de Sistemas especializado en automatización con Python y Genesys Cloud.
-🔗 LinkedIn
-🔗 GitHub
+🔗 [LinkedIn](https://www.linkedin.com/in/alejandrotoloza)  
+🔗 [GitHub](https://github.com/AlejandroToloza)
 🤝 ¿Quieres contribuir?
 
 ¡Bienvenido! Puedes proponer mejoras, reportar errores o crear un pull request.
