@@ -39,6 +39,7 @@ Ejecuta el script desde consola:
 ```bash
 python scripts/export_all_users/export_all_users.py
 ```
+---
 
 ## Ingresa los siguientes datos cuando se te solicite:
 
@@ -48,9 +49,13 @@ python scripts/export_all_users/export_all_users.py
 
 🔸 Client Secret (entrada segura oculta)
 
+---
+
 ## El archivo se guardará automáticamente en tu escritorio, en la ruta:
 
 **Escritorio/PYTHON/EXPORTS/usuarios_genesys_YYYYMMDD_HHMMSS.xlsx**
+
+---
 
 ## 🌍 Regiones disponibles
 
@@ -69,25 +74,40 @@ python scripts/export_all_users/export_all_users.py
 **Genesys Cloud Domain Names**
 https://es-help.mypurecloud.com/articles/change-the-region-of-your-genesys-cloud-organization/#tab2
 
+---
+
 ## 📦 Estructura del archivo Excel generado
 | ID | Nombre | Email | Título | Estado | Departamento | División |
 
 > Los datos se exportan limpios y organizados para facilitar análisis posteriores.
 
-## 🧑‍💻 Autor
+---
 
-Arley Alejandro Toloza Martínez
-Ingeniero de Sistemas especializado en automatización con Python y Genesys Cloud.
+## 🙋‍♂️ Autor
+
+Este proyecto fue desarrollado por:
+
+**Arley Alejandro Toloza Martínez**  
+Ingeniero de Sistemas | Especialista en Genesys Cloud | Apasionado por la automatización con Python  
 🔗 [LinkedIn](https://www.linkedin.com/in/alejandrotoloza)  
 🔗 [GitHub](https://github.com/AlejandroToloza)
+
+---
 
 ## 🤝 ¿Quieres contribuir?
 
 ¡Bienvenido! Puedes proponer mejoras, reportar errores o crear un pull request.
+
+---
+
 ## ⚖️ Licencia
 
 Este proyecto está bajo licencia MIT.
 Puedes usarlo, modificarlo y distribuirlo libremente, siempre dando el debido crédito.
 
+---
+
 ## 🎯 ¿Te fue útil?
 Dale una ⭐ al repositorio y comparte con tu equipo o red. ¡Automatizar es avanzar!
+
+---
