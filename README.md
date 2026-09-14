@@ -17,6 +17,7 @@ Bienvenido a `gcloud-automation-tools`, una colección de scripts y herramientas
 | [Miembros por cola](./scripts/miembros_por_cola/README.md) | Lista todas las colas existentes junto con sus respectivos miembros. | ✅ Disponible |
 | [Total contacts externals](./scripts/total_contacts_externals/README.md) | Devuelve el total de contactos externos creados en la organización. | ✅ Disponible |
 | [Agentes por roles](./scripts/agentes_por_roles/README.md) | Muestra los agentes agrupados por rol, junto con el ID de cada rol. | ✅ Disponible |
+| [Actualizar usuarios en bulk](./scripts/bulk_actualizar_usuarios/README.md) ✍️ | Actualiza department/title de usuarios en bulk desde un CSV (escribe en tu organización). | ✅ Disponible |
 
 ---
 
@@ -61,6 +62,7 @@ gcloud-tools queue-scripts
 gcloud-tools queue-members
 gcloud-tools external-contacts
 gcloud-tools roles
+gcloud-tools update-users --archivo cambios.csv   # ✍️ escribe — ver más abajo
 ```
 
 Cualquier subcomando acepta `--region` para saltar el menú interactivo (equivale a definir `GENESYS_REGION`):
@@ -73,18 +75,32 @@ Cada subcomando ejecuta exactamente el mismo script que su equivalente en `scrip
 
 ---
 
+## ✍️ Operaciones de escritura (bulk)
+
+A diferencia de las automatizaciones de arriba (todas de solo lectura/exportación), `update-users` **escribe** en tu organización de Genesys Cloud. Es el primero de varios scripts de bulk-write planeados para este repositorio, y todos comparten el mismo modelo de seguridad:
+
+- **Vista previa por defecto**: sin `--confirm` (o `BULK_CONFIRM=1`), el script solo muestra qué cambiaría y no toca nada.
+- **Backup automático** del estado "antes", guardado como Excel antes de escribir.
+- **Un error en una fila no cancela el resto** del lote — se registra y se sigue.
+- **Log de auditoría**: qué se aplicó, cuándo, con qué resultado, fila por fila.
+
+Detalle completo, formato del CSV y ejemplos en [scripts/bulk_actualizar_usuarios/README.md](./scripts/bulk_actualizar_usuarios/README.md).
+
+---
+
 ## 📂 Estructura del repositorio
 
 ```
 gcloud-automation-tools/
 ├── gcloud_tools/                # CLI único (gcloud-tools)
 ├── scripts/
-│   ├── common/                  # Módulo compartido (auth, regiones, export a Excel)
+│   ├── common/                  # Módulo compartido (auth, regiones, export a Excel, bulk-write)
 │   ├── export_all_users/
 │   ├── agentes_por_roles/
 │   ├── colas_tipo_y_script/
 │   ├── miembros_por_cola/
-│   └── total_contacts_externals/
+│   ├── total_contacts_externals/
+│   └── bulk_actualizar_usuarios/ # ✍️ Escribe en la organización (ver más abajo)
 ├── tests/                       # Tests automatizados (pytest)
 ├── .env.example
 ├── pyproject.toml

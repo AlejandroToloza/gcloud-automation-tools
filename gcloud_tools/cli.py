@@ -34,7 +34,16 @@ COMANDOS = {
         'scripts/agentes_por_roles/agentes_por_roles.py',
         'Exporta los agentes agrupados por rol de autorización.',
     ),
+    'update-users': (
+        'actualizar_usuarios',
+        'scripts/bulk_actualizar_usuarios/actualizar_usuarios.py',
+        'Actualiza department/title de usuarios en bulk desde un CSV (vista previa por defecto).',
+    ),
 }
+
+# Subcomandos que ESCRIBEN en la organización (no son de solo lectura) y por
+# lo tanto aceptan --archivo/--confirm además de --region.
+COMANDOS_BULK = {'update-users'}
 
 
 def _cargar_main(nombre_modulo, ruta_relativa):
@@ -61,10 +70,26 @@ def main(argv=None):
             help='Número de región de Genesys Cloud (ver el menú interactivo para la lista). '
                  'Si se pasa, evita el menú y equivale a definir GENESYS_REGION.',
         )
+        if nombre in COMANDOS_BULK:
+            subparser.add_argument(
+                '--archivo',
+                metavar='CSV',
+                help='Ruta al CSV con los cambios a aplicar.',
+            )
+            subparser.add_argument(
+                '--confirm',
+                action='store_true',
+                help='Aplica los cambios de verdad. Sin esta bandera, solo muestra una vista previa (dry-run).',
+            )
 
     args = parser.parse_args(argv)
     if args.region:
         os.environ['GENESYS_REGION'] = args.region
+    if args.comando in COMANDOS_BULK:
+        if args.archivo:
+            os.environ['BULK_ARCHIVO_CSV'] = args.archivo
+        if args.confirm:
+            os.environ['BULK_CONFIRM'] = '1'
 
     nombre_modulo, ruta_relativa, _ = COMANDOS[args.comando]
     funcion_main = _cargar_main(nombre_modulo, ruta_relativa)

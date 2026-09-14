@@ -77,3 +77,43 @@ def test_sin_flag_region_no_toca_la_variable_de_entorno(monkeypatch):
     cli.main(['export-users'])
 
     assert llamado == [None]
+
+
+def test_comando_de_solo_lectura_no_acepta_archivo_ni_confirm():
+    with pytest.raises(SystemExit):
+        cli.main(['export-users', '--archivo', 'x.csv'])
+
+
+def test_comando_bulk_define_archivo_y_confirm_antes_de_llamar(monkeypatch):
+    monkeypatch.delenv('BULK_ARCHIVO_CSV', raising=False)
+    monkeypatch.delenv('BULK_CONFIRM', raising=False)
+    valor_visto = {}
+
+    def fake_cargar_main(nombre_modulo, ruta_relativa):
+        def fake_main():
+            valor_visto['archivo'] = cli.os.environ.get('BULK_ARCHIVO_CSV')
+            valor_visto['confirm'] = cli.os.environ.get('BULK_CONFIRM')
+        return fake_main
+
+    monkeypatch.setattr(cli, '_cargar_main', fake_cargar_main)
+
+    cli.main(['update-users', '--archivo', 'cambios.csv', '--confirm'])
+
+    assert valor_visto == {'archivo': 'cambios.csv', 'confirm': '1'}
+
+
+def test_comando_bulk_sin_confirm_no_define_bulk_confirm(monkeypatch):
+    monkeypatch.delenv('BULK_ARCHIVO_CSV', raising=False)
+    monkeypatch.delenv('BULK_CONFIRM', raising=False)
+    valor_visto = {}
+
+    def fake_cargar_main(nombre_modulo, ruta_relativa):
+        def fake_main():
+            valor_visto['confirm'] = cli.os.environ.get('BULK_CONFIRM')
+        return fake_main
+
+    monkeypatch.setattr(cli, '_cargar_main', fake_cargar_main)
+
+    cli.main(['update-users', '--archivo', 'cambios.csv'])
+
+    assert valor_visto == {'confirm': None}

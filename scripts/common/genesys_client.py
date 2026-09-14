@@ -115,6 +115,52 @@ def solicitar_api(token, api_domain, path, params=None):
         return response.json()
 
 
+def solicitar_api_post(token, api_domain, path, body):
+    """Hace un POST autenticado (ej. endpoints de búsqueda) contra la API de
+    Genesys Cloud, reintentando automáticamente en HTTP 429."""
+    url = f'https://{api_domain}{path}' if path.startswith('/') else f'https://{api_domain}/{path}'
+    headers = {'Authorization': f'Bearer {token}'}
+
+    while True:
+        response = requests.post(url, headers=headers, json=body)
+        if response.status_code == 429:
+            retry_after = int(response.headers.get('Retry-After', 5))
+            print(f"[!] Límite de peticiones alcanzado. Reintentando en {retry_after} segundos...")
+            time.sleep(retry_after)
+            continue
+        response.raise_for_status()
+        return response.json()
+
+
+def solicitar_api_patch(token, api_domain, path, body):
+    """Hace un PATCH autenticado (escritura) contra la API de Genesys Cloud,
+    reintentando automáticamente en HTTP 429."""
+    url = f'https://{api_domain}{path}' if path.startswith('/') else f'https://{api_domain}/{path}'
+    headers = {'Authorization': f'Bearer {token}'}
+
+    while True:
+        response = requests.patch(url, headers=headers, json=body)
+        if response.status_code == 429:
+            retry_after = int(response.headers.get('Retry-After', 5))
+            print(f"[!] Límite de peticiones alcanzado. Reintentando en {retry_after} segundos...")
+            time.sleep(retry_after)
+            continue
+        response.raise_for_status()
+        return response.json()
+
+
+def buscar_usuario_por_email(token, api_domain, email):
+    """Busca un usuario por email exacto vía POST /api/v2/users/search.
+    Devuelve el dict del usuario encontrado, o None si no hay coincidencia."""
+    body = {
+        'query': [{'type': 'EXACT', 'fields': ['email'], 'value': email}],
+        'pageSize': 1,
+    }
+    data = solicitar_api_post(token, api_domain, '/api/v2/users/search', body)
+    resultados = data.get('results', [])
+    return resultados[0] if resultados else None
+
+
 def obtener_colas(token, api_domain):
     """Obtiene todas las colas de la organización, siguiendo la paginación por nextUri."""
     colas = []
