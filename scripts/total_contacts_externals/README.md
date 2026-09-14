@@ -105,7 +105,7 @@ Este proyecto fue desarrollado por:
 **Arley Alejandro Toloza Martínez**  
 Ingeniero de Sistemas | Especialista en Genesys Cloud | Apasionado por la automatización con Python  
 
-🔗 [LinkedIn](https://www.linkedin.com/in/alejandrotoloza)  
+🔗 [LinkedIn](https://www.linkedin.com/in/alejandro-toloza/)  
 🔗 [GitHub](https://github.com/AlejandroToloza)  
 
 ---
