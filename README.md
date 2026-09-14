@@ -31,16 +31,18 @@ pip install -r requirements.txt
 
 > 📌 Asegúrate de estar en la carpeta raíz del repositorio antes de ejecutar ese comando.
 
-### 🔐 Credenciales (opcional, recomendado para automatizar)
+### 🔐 Credenciales y región (opcional, necesario para automatizar sin intervención humana)
 
-Por defecto, cada script te pide el `Client ID` y `Client Secret` por consola. Si prefieres no escribirlos cada vez (por ejemplo, para correr los scripts desde una tarea programada), puedes definirlos como variables de entorno:
+Por defecto, cada script te pide el `Client ID`, `Client Secret` **y la región** por consola. Para correr los scripts sin que nadie los atienda (tarea programada, cron), define las tres cosas como variables de entorno:
 
 ```bash
 cp .env.example .env
-# Edita .env y completa tus credenciales
+# Edita .env y completa tus credenciales y GENESYS_REGION
 ```
 
-Si el archivo `.env` existe, los scripts lo leen automáticamente y se saltan la pregunta por consola. `.env` está en `.gitignore`: nunca se sube al repositorio.
+Si el archivo `.env` existe, los scripts lo leen automáticamente y se saltan **ambas** preguntas (credenciales y región). `.env` está en `.gitignore`: nunca se sube al repositorio.
+
+> ⚠️ Definir solo `GENESYS_CLIENT_ID`/`GENESYS_CLIENT_SECRET` sin `GENESYS_REGION` no alcanza para una ejecución 100% desatendida: el script igual se quedará esperando que elijas la región por consola.
 
 ### 🚀 CLI único (opcional)
 
@@ -57,6 +59,12 @@ gcloud-tools queue-scripts
 gcloud-tools queue-members
 gcloud-tools external-contacts
 gcloud-tools roles
+```
+
+Cualquier subcomando acepta `--region` para saltar el menú interactivo (equivale a definir `GENESYS_REGION`):
+
+```bash
+gcloud-tools export-users --region 1
 ```
 
 Cada subcomando ejecuta exactamente el mismo script que su equivalente en `scripts/`; es solo una forma más cómoda de invocarlos.

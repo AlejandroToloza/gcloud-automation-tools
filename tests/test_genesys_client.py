@@ -117,3 +117,37 @@ def test_solicitar_credenciales_pide_por_consola_si_no_hay_env(monkeypatch):
     client_id, client_secret = genesys_client.solicitar_credenciales()
 
     assert (client_id, client_secret) == ('typed-id', 'typed-secret')
+
+
+def test_seleccionar_region_desde_variable_de_entorno(monkeypatch):
+    monkeypatch.setenv('GENESYS_REGION', '2')
+
+    def input_no_debe_llamarse(_):
+        raise AssertionError('no debería pedir input cuando GENESYS_REGION es válida')
+
+    monkeypatch.setattr('builtins.input', input_no_debe_llamarse)
+
+    login_domain, api_domain, descripcion = genesys_client.seleccionar_region()
+
+    assert (login_domain, api_domain) == ('login.usw2.pure.cloud', 'api.usw2.pure.cloud')
+    assert descripcion == 'Estados Unidos (Oeste)'
+
+
+def test_seleccionar_region_invalida_cae_a_consola(monkeypatch):
+    monkeypatch.setenv('GENESYS_REGION', '99')
+    monkeypatch.setattr('builtins.input', lambda _: '3')
+
+    login_domain, api_domain, descripcion = genesys_client.seleccionar_region()
+
+    assert descripcion == 'Américas (Canadá)'
+    assert (login_domain, api_domain) == ('login.cac1.pure.cloud', 'api.cac1.pure.cloud')
+
+
+def test_seleccionar_region_pide_por_consola_si_no_hay_env(monkeypatch):
+    monkeypatch.delenv('GENESYS_REGION', raising=False)
+    monkeypatch.setattr('builtins.input', lambda _: '1')
+
+    login_domain, api_domain, descripcion = genesys_client.seleccionar_region()
+
+    assert descripcion == 'Estados Unidos (Este)'
+    assert (login_domain, api_domain) == ('login.mypurecloud.com', 'api.mypurecloud.com')

@@ -47,3 +47,33 @@ def test_sin_comando_termina_con_error():
 def test_cargar_main_carga_el_script_real():
     funcion_main = cli._cargar_main('export_all_users', 'scripts/export_all_users/export_all_users.py')
     assert callable(funcion_main)
+
+
+def test_flag_region_define_genesys_region_antes_de_llamar(monkeypatch):
+    monkeypatch.delenv('GENESYS_REGION', raising=False)
+    valor_visto = {}
+
+    def fake_cargar_main(nombre_modulo, ruta_relativa):
+        def fake_main():
+            valor_visto['region'] = cli.os.environ.get('GENESYS_REGION')
+        return fake_main
+
+    monkeypatch.setattr(cli, '_cargar_main', fake_cargar_main)
+
+    cli.main(['export-users', '--region', '3'])
+
+    assert valor_visto['region'] == '3'
+
+
+def test_sin_flag_region_no_toca_la_variable_de_entorno(monkeypatch):
+    monkeypatch.delenv('GENESYS_REGION', raising=False)
+    llamado = []
+
+    def fake_cargar_main(nombre_modulo, ruta_relativa):
+        return lambda: llamado.append(cli.os.environ.get('GENESYS_REGION'))
+
+    monkeypatch.setattr(cli, '_cargar_main', fake_cargar_main)
+
+    cli.main(['export-users'])
+
+    assert llamado == [None]

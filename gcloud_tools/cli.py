@@ -54,9 +54,18 @@ def main(argv=None):
     )
     subparsers = parser.add_subparsers(dest='comando', required=True)
     for nombre, (_, _, descripcion) in COMANDOS.items():
-        subparsers.add_parser(nombre, help=descripcion)
+        subparser = subparsers.add_parser(nombre, help=descripcion)
+        subparser.add_argument(
+            '--region',
+            metavar='N',
+            help='Número de región de Genesys Cloud (ver el menú interactivo para la lista). '
+                 'Si se pasa, evita el menú y equivale a definir GENESYS_REGION.',
+        )
 
     args = parser.parse_args(argv)
+    if args.region:
+        os.environ['GENESYS_REGION'] = args.region
+
     nombre_modulo, ruta_relativa, _ = COMANDOS[args.comando]
     funcion_main = _cargar_main(nombre_modulo, ruta_relativa)
     funcion_main()

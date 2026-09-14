@@ -2,6 +2,7 @@
 selección de región, autenticación OAuth2 y llamadas paginadas a la API,
 y exportación de resultados a Excel."""
 import os
+import sys
 import time
 from datetime import datetime
 from getpass import getpass
@@ -12,6 +13,16 @@ try:
     from dotenv import load_dotenv
     load_dotenv()
 except ImportError:
+    pass
+
+# En consolas con un codepage heredado (cp1252 y similares, típico en tareas
+# programadas de Windows o consolas antiguas) los prints con emoji de estos
+# scripts pueden lanzar UnicodeEncodeError y cortar la ejecución. Se fuerza
+# UTF-8 en stdout/stderr, reemplazando lo que no se pueda mostrar.
+try:
+    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+    sys.stderr.reconfigure(encoding='utf-8', errors='replace')
+except (AttributeError, ValueError):
     pass
 
 REGIONES = {
@@ -27,7 +38,20 @@ REGIONES = {
 
 
 def seleccionar_region():
-    """Muestra el menú de regiones y devuelve (login_domain, api_domain, descripcion)."""
+    """Devuelve (login_domain, api_domain, descripcion) de la región a usar.
+
+    Si la variable de entorno GENESYS_REGION está definida con un número de
+    región válido (ver REGIONES), la usa directamente sin preguntar nada,
+    para permitir ejecuciones no interactivas (tareas programadas, CLI con
+    --region). Si no está definida o es inválida, muestra el menú interactivo."""
+    region_env = os.environ.get('GENESYS_REGION', '').strip()
+    if region_env:
+        if region_env in REGIONES:
+            _, descripcion, login_domain, api_domain = REGIONES[region_env]
+            print(f"🌍 Región cargada desde GENESYS_REGION: {descripcion}\n")
+            return login_domain, api_domain, descripcion
+        print(f"[!] GENESYS_REGION={region_env!r} no es una región válida. Se pedirá por consola.\n")
+
     print("🌍 Selecciona la región de tu organización:\n")
     for key, (_, descripcion, _, _) in REGIONES.items():
         print(f"  {key}. {descripcion}")
