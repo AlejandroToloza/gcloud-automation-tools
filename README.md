@@ -42,12 +42,32 @@ cp .env.example .env
 
 Si el archivo `.env` existe, los scripts lo leen automáticamente y se saltan la pregunta por consola. `.env` está en `.gitignore`: nunca se sube al repositorio.
 
+### 🚀 CLI único (opcional)
+
+En vez de recordar la ruta de cada script, puedes instalar el repositorio como herramienta y usar un solo comando:
+
+```bash
+pip install -e .
+gcloud-tools --help
+```
+
+```bash
+gcloud-tools export-users
+gcloud-tools queue-scripts
+gcloud-tools queue-members
+gcloud-tools external-contacts
+gcloud-tools roles
+```
+
+Cada subcomando ejecuta exactamente el mismo script que su equivalente en `scripts/`; es solo una forma más cómoda de invocarlos.
+
 ---
 
 ## 📂 Estructura del repositorio
 
 ```
 gcloud-automation-tools/
+├── gcloud_tools/                # CLI único (gcloud-tools)
 ├── scripts/
 │   ├── common/                  # Módulo compartido (auth, regiones, export a Excel)
 │   ├── export_all_users/
@@ -57,6 +77,7 @@ gcloud-automation-tools/
 │   └── total_contacts_externals/
 ├── tests/                       # Tests automatizados (pytest)
 ├── .env.example
+├── pyproject.toml
 ├── requirements.txt
 ├── requirements-dev.txt
 ├── LICENSE
