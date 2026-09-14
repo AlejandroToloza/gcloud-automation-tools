@@ -91,6 +91,23 @@ def solicitar_api(token, api_domain, path, params=None):
         return response.json()
 
 
+def obtener_colas(token, api_domain):
+    """Obtiene todas las colas de la organización, siguiendo la paginación por nextUri."""
+    colas = []
+    path = '/api/v2/routing/queues?pageSize=100'
+
+    while path:
+        try:
+            data = solicitar_api(token, api_domain, path)
+        except requests.exceptions.RequestException as e:
+            print(f"❌ Error al obtener colas: {e}")
+            break
+        colas.extend(data.get('entities', []))
+        path = data.get('nextUri')
+
+    return colas
+
+
 def guardar_excel(dataframe, prefijo_archivo, region_nombre):
     """Guarda un DataFrame en Excel dentro de Escritorio/PYTHON/EXPORTS/ y devuelve la ruta generada."""
     carpeta_export = os.path.join(os.path.expanduser("~"), "Desktop", "PYTHON", "EXPORTS")

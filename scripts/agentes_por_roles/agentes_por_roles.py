@@ -1,11 +1,14 @@
 import os
 import sys
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 import pandas as pd
 import requests
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'common'))
 from genesys_client import seleccionar_region, solicitar_credenciales, obtener_token, solicitar_api, guardar_excel
+
+MAX_WORKERS = 8
 
 
 def obtener_roles(token, api_domain):
@@ -88,6 +91,19 @@ def obtener_detalles_usuarios(token, api_domain, usuario_ids):
     return detalles
 
 
+def procesar_rol(token, api_domain, rol):
+    """Devuelve las asignaciones (role_id, role_name, user_id) de un rol."""
+    role_id = rol.get('id')
+    role_name = rol.get('name')
+    if not role_id:
+        return []
+
+    return [
+        (role_id, role_name, user_id)
+        for user_id in obtener_usuarios_de_rol(token, api_domain, role_id)
+    ]
+
+
 def main():
     print("==== Agentes por Roles - Genesys Cloud ====\n")
 
@@ -104,23 +120,19 @@ def main():
     roles = obtener_roles(token, api_domain)
     print(f"[+] {len(roles)} roles encontrados.")
 
-    print("\n👥 Consultando usuarios asignados a cada rol...")
+    print(f"\n👥 Consultando usuarios asignados a cada rol (hasta {MAX_WORKERS} en paralelo)...")
     asignaciones = []
-    todos_los_ids = []
-    for rol in roles:
-        role_id = rol.get('id')
-        role_name = rol.get('name')
-        if not role_id:
-            continue
-        for user_id in obtener_usuarios_de_rol(token, api_domain, role_id):
-            asignaciones.append((role_id, role_name, user_id))
-            todos_los_ids.append(user_id)
+    with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+        futuros = [executor.submit(procesar_rol, token, api_domain, rol) for rol in roles]
+        for futuro in as_completed(futuros):
+            asignaciones.extend(futuro.result())
 
     if not asignaciones:
         print("⚠️ No se encontraron agentes asignados a roles.")
         return
 
     print("\n🔎 Obteniendo nombre y email de los usuarios...")
+    todos_los_ids = [user_id for _, _, user_id in asignaciones]
     detalles_usuarios = obtener_detalles_usuarios(token, api_domain, todos_los_ids)
 
     datos = []
@@ -134,7 +146,7 @@ def main():
             'Email': detalle.get('email', ''),
         })
 
-    df = pd.DataFrame(datos)
+    df = pd.DataFrame(datos).sort_values(['Nombre de Rol', 'Nombre de Usuario']).reset_index(drop=True)
     guardar_excel(df, 'agentes_por_roles', region_nombre)
 
 

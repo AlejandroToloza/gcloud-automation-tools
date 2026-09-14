@@ -14,6 +14,7 @@ Es ideal para tareas de:
 
 ✅ Lista todos los roles de autorización de la organización  
 ✅ Obtiene los agentes asignados a cada rol (ID, nombre, email)  
+✅ Consulta los roles en paralelo (hasta 8 a la vez) para acelerar organizaciones grandes  
 ✅ Compatible con múltiples regiones de Genesys Cloud  
 ✅ Entrada segura del `Client ID` y `Client Secret`  
 ✅ Exportación a Excel con columnas organizadas  

@@ -1,28 +1,21 @@
 import os
 import sys
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 import pandas as pd
 import requests
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'common'))
-from genesys_client import seleccionar_region, solicitar_credenciales, obtener_token, solicitar_api, guardar_excel
+from genesys_client import (
+    seleccionar_region,
+    solicitar_credenciales,
+    obtener_token,
+    solicitar_api,
+    obtener_colas,
+    guardar_excel,
+)
 
-
-def obtener_colas(token, api_domain):
-    """Obtiene todas las colas de la organización, siguiendo la paginación por nextUri."""
-    colas = []
-    path = '/api/v2/routing/queues?pageSize=100'
-
-    while path:
-        try:
-            data = solicitar_api(token, api_domain, path)
-        except requests.exceptions.RequestException as e:
-            print(f"❌ Error al obtener colas: {e}")
-            break
-        colas.extend(data.get('entities', []))
-        path = data.get('nextUri')
-
-    return colas
+MAX_WORKERS = 8
 
 
 def obtener_nombre_script(token, api_domain, script_id):
@@ -67,6 +60,25 @@ def obtener_scripts_de_cola(token, api_domain, queue_id):
     return scripts_info
 
 
+def procesar_cola(token, api_domain, cola):
+    """Arma las filas del reporte (una por script) para una cola."""
+    queue_id = cola.get('id')
+    queue_name = cola.get('name')
+    if not queue_id:
+        return []
+
+    return [
+        {
+            'ID de Cola': queue_id,
+            'Nombre de Cola': queue_name,
+            'Tipo de Script': script['Tipo de Script'],
+            'ID de Script': script['ID de Script'],
+            'Nombre del Script': script['Nombre del Script'],
+        }
+        for script in obtener_scripts_de_cola(token, api_domain, queue_id)
+    ]
+
+
 def main():
     print("==== Exportador de Colas y Scripts de Genesys Cloud ====\n")
 
@@ -81,29 +93,20 @@ def main():
 
     print("\n📥 Obteniendo listado de colas...")
     colas = obtener_colas(token, api_domain)
+    print(f"[+] {len(colas)} colas encontradas.")
 
-    print("\n🔗 Consultando scripts asignados a cada cola...")
+    print(f"\n🔗 Consultando scripts asignados a cada cola (hasta {MAX_WORKERS} en paralelo)...")
     datos = []
-    for cola in colas:
-        queue_id = cola.get('id')
-        queue_name = cola.get('name')
-        if not queue_id:
-            continue
-        scripts = obtener_scripts_de_cola(token, api_domain, queue_id)
-        for script in scripts:
-            datos.append({
-                'ID de Cola': queue_id,
-                'Nombre de Cola': queue_name,
-                'Tipo de Script': script['Tipo de Script'],
-                'ID de Script': script['ID de Script'],
-                'Nombre del Script': script['Nombre del Script'],
-            })
+    with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+        futuros = [executor.submit(procesar_cola, token, api_domain, cola) for cola in colas]
+        for futuro in as_completed(futuros):
+            datos.extend(futuro.result())
 
     if not datos:
         print("⚠️ No se encontraron colas.")
         return
 
-    df = pd.DataFrame(datos)
+    df = pd.DataFrame(datos).sort_values(['Nombre de Cola', 'Tipo de Script']).reset_index(drop=True)
     guardar_excel(df, 'queues_and_scripts', region_nombre)
 
 

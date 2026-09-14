@@ -5,24 +5,14 @@ import pandas as pd
 import requests
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'common'))
-from genesys_client import seleccionar_region, solicitar_credenciales, obtener_token, solicitar_api, guardar_excel
-
-
-def obtener_colas(token, api_domain):
-    """Obtiene todas las colas de la organización, siguiendo la paginación por nextUri."""
-    colas = []
-    path = '/api/v2/routing/queues?pageSize=100'
-
-    while path:
-        try:
-            data = solicitar_api(token, api_domain, path)
-        except requests.exceptions.RequestException as e:
-            print(f"❌ Error al obtener colas: {e}")
-            break
-        colas.extend(data.get('entities', []))
-        path = data.get('nextUri')
-
-    return colas
+from genesys_client import (
+    seleccionar_region,
+    solicitar_credenciales,
+    obtener_token,
+    solicitar_api,
+    obtener_colas,
+    guardar_excel,
+)
 
 
 def obtener_miembros_de_cola(token, api_domain, queue_id):

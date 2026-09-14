@@ -29,6 +29,21 @@ def test_obtener_usuarios_de_rol(requests_mock):
     assert ids == ['u1', 'u2']
 
 
+def test_procesar_rol_arma_asignaciones(requests_mock):
+    requests_mock.get(
+        'https://api.mypurecloud.com/api/v2/authorization/roles/r1/users',
+        json={'entities': [{'id': 'u1'}, {'id': 'u2'}], 'pageCount': 1},
+    )
+
+    asignaciones = m.procesar_rol('token', 'api.mypurecloud.com', {'id': 'r1', 'name': 'Admin'})
+
+    assert asignaciones == [('r1', 'Admin', 'u1'), ('r1', 'Admin', 'u2')]
+
+
+def test_procesar_rol_sin_id_devuelve_vacio():
+    assert m.procesar_rol('token', 'api.mypurecloud.com', {'name': 'Sin ID'}) == []
+
+
 def test_obtener_detalles_usuarios_deduplica_y_agrupa_en_lotes(requests_mock):
     requests_mock.get(
         'https://api.mypurecloud.com/api/v2/users',

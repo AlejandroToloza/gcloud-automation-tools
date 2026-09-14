@@ -19,6 +19,7 @@ Ideal para tareas como:
 - ✅ Compatible con múltiples regiones oficiales de Genesys Cloud  
 - ✅ Entrada segura del `Client ID` y `Client Secret`  
 - ✅ Manejo de paginación y errores de red  
+- ✅ Consulta las colas en paralelo (hasta 8 a la vez) para acelerar organizaciones grandes  
 - ✅ Exportación a Excel con columnas organizadas  
 - ✅ Ruta fija de exportación: `Escritorio/PYTHON/EXPORTS/`  
 

@@ -42,6 +42,35 @@ def test_solicitar_api_reintenta_en_rate_limit(requests_mock):
     assert requests_mock.call_count == 2
 
 
+def test_obtener_colas_sigue_nexturi(requests_mock):
+    requests_mock.get(
+        'https://api.mypurecloud.com/api/v2/routing/queues',
+        [
+            {
+                'json': {
+                    'entities': [{'id': '1', 'name': 'Cola A'}],
+                    'nextUri': '/api/v2/routing/queues?pageSize=100&pageNumber=2',
+                },
+                'status_code': 200,
+            },
+            {'json': {'entities': [{'id': '2', 'name': 'Cola B'}]}, 'status_code': 200},
+        ],
+    )
+
+    colas = genesys_client.obtener_colas('token', 'api.mypurecloud.com')
+
+    assert [c['id'] for c in colas] == ['1', '2']
+    assert requests_mock.call_count == 2
+
+
+def test_obtener_colas_detiene_en_error(requests_mock):
+    requests_mock.get('https://api.mypurecloud.com/api/v2/routing/queues', status_code=500)
+
+    colas = genesys_client.obtener_colas('token', 'api.mypurecloud.com')
+
+    assert colas == []
+
+
 def test_solicitar_api_propaga_error_http(requests_mock):
     requests_mock.get(
         'https://api.mypurecloud.com/api/v2/users/x',
