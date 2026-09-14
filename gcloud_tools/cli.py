@@ -54,11 +54,24 @@ COMANDOS = {
         'scripts/bulk_reset_password/reset_password.py',
         'Fija una contraseña temporal nueva a usuarios en bulk desde un CSV (vista previa por defecto).',
     ),
+    'update-queue-script': (
+        'actualizar_script_cola',
+        'scripts/bulk_actualizar_script_cola/actualizar_script_cola.py',
+        'Actualiza el script/IVR por defecto de colas en bulk desde un CSV (vista previa por defecto).',
+    ),
+    'update-queue-wrapupcodes': (
+        'wrapupcodes_cola',
+        'scripts/bulk_wrapupcodes_cola/wrapupcodes_cola.py',
+        'Agrega/quita wrap-up codes de colas en bulk desde un CSV (vista previa por defecto).',
+    ),
 }
 
 # Subcomandos que ESCRIBEN en la organización (no son de solo lectura) y por
 # lo tanto aceptan --archivo/--confirm además de --region.
-COMANDOS_BULK = {'update-users', 'set-user-state', 'update-division', 'reset-password'}
+COMANDOS_BULK = {
+    'update-users', 'set-user-state', 'update-division', 'reset-password',
+    'update-queue-script', 'update-queue-wrapupcodes',
+}
 
 
 def _cargar_main(nombre_modulo, ruta_relativa):

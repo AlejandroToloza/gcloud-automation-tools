@@ -21,6 +21,8 @@ Bienvenido a `gcloud-automation-tools`, una colección de scripts y herramientas
 | [Activar/desactivar usuarios en bulk](./scripts/bulk_activar_desactivar/README.md) ✍️ | Activa o desactiva cuentas de usuario en bulk desde un CSV (escribe en tu organización). | ✅ Disponible |
 | [Reasignar división en bulk](./scripts/bulk_reasignar_division/README.md) ✍️ | Cambia la división de usuarios en bulk desde un CSV (escribe en tu organización). | ✅ Disponible |
 | [Reset de contraseña en bulk](./scripts/bulk_reset_password/README.md) ✍️ | Fija una contraseña temporal nueva a usuarios en bulk desde un CSV (escribe en tu organización). | ✅ Disponible |
+| [Script/IVR de colas en bulk](./scripts/bulk_actualizar_script_cola/README.md) ✍️ | Actualiza el script por defecto de colas en bulk desde un CSV (escribe en tu organización). | ✅ Disponible |
+| [Wrap-up codes de colas en bulk](./scripts/bulk_wrapupcodes_cola/README.md) ✍️ | Agrega/quita wrap-up codes de colas en bulk desde un CSV (escribe en tu organización). | ✅ Disponible |
 
 ---
 
@@ -69,6 +71,8 @@ gcloud-tools update-users --archivo cambios.csv     # ✍️ escribe — ver má
 gcloud-tools set-user-state --archivo cambios.csv   # ✍️ escribe
 gcloud-tools update-division --archivo cambios.csv  # ✍️ escribe
 gcloud-tools reset-password --archivo cambios.csv   # ✍️ escribe
+gcloud-tools update-queue-script --archivo cambios.csv       # ✍️ escribe
+gcloud-tools update-queue-wrapupcodes --archivo cambios.csv  # ✍️ escribe
 ```
 
 Cualquier subcomando acepta `--region` para saltar el menú interactivo (equivale a definir `GENESYS_REGION`):
@@ -96,6 +100,8 @@ A diferencia de las automatizaciones de arriba (todas de solo lectura/exportaci�
 | `set-user-state` | Activa/desactiva usuarios | [README](./scripts/bulk_activar_desactivar/README.md) |
 | `update-division` | Reasigna división | [README](./scripts/bulk_reasignar_division/README.md) |
 | `reset-password` | Fija contraseña temporal nueva | [README](./scripts/bulk_reset_password/README.md) — leé la nota de seguridad antes de usarlo |
+| `update-queue-script` | Script/IVR por defecto de colas | [README](./scripts/bulk_actualizar_script_cola/README.md) |
+| `update-queue-wrapupcodes` | Wrap-up codes de colas | [README](./scripts/bulk_wrapupcodes_cola/README.md) |
 
 ---
 
@@ -114,7 +120,9 @@ gcloud-automation-tools/
 │   ├── bulk_actualizar_usuarios/  # ✍️ Escribe en la organización (ver más abajo)
 │   ├── bulk_activar_desactivar/   # ✍️
 │   ├── bulk_reasignar_division/   # ✍️
-│   └── bulk_reset_password/       # ✍️
+│   ├── bulk_reset_password/       # ✍️
+│   ├── bulk_actualizar_script_cola/  # ✍️
+│   └── bulk_wrapupcodes_cola/        # ✍️
 ├── tests/                       # Tests automatizados (pytest)
 ├── .env.example
 ├── pyproject.toml

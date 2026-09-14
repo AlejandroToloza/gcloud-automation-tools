@@ -6,63 +6,17 @@ import pandas as pd
 import requests
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'common'))
-from genesys_client import seleccionar_region, solicitar_credenciales, obtener_token, solicitar_api, guardar_excel
+from genesys_client import (
+    seleccionar_region,
+    solicitar_credenciales,
+    obtener_token,
+    solicitar_api,
+    obtener_roles,
+    obtener_usuarios_de_rol,
+    guardar_excel,
+)
 
 MAX_WORKERS = 8
-
-
-def obtener_roles(token, api_domain):
-    """Obtiene todos los roles de autorización de la organización."""
-    roles = []
-    page_number = 1
-
-    while True:
-        try:
-            data = solicitar_api(token, api_domain, '/api/v2/authorization/roles', params={
-                'pageSize': 100,
-                'pageNumber': page_number,
-            })
-        except requests.exceptions.RequestException as e:
-            print(f"❌ Error al obtener roles: {e}")
-            break
-
-        entidades = data.get('entities', [])
-        if not entidades:
-            break
-        roles.extend(entidades)
-
-        if page_number >= data.get('pageCount', 1):
-            break
-        page_number += 1
-
-    return roles
-
-
-def obtener_usuarios_de_rol(token, api_domain, role_id):
-    """Obtiene los IDs de los usuarios asignados directamente a un rol."""
-    usuario_ids = []
-    page_number = 1
-
-    while True:
-        try:
-            data = solicitar_api(token, api_domain, f'/api/v2/authorization/roles/{role_id}/users', params={
-                'pageSize': 100,
-                'pageNumber': page_number,
-            })
-        except requests.exceptions.RequestException as e:
-            print(f"❌ Error al obtener usuarios del rol {role_id}: {e}")
-            break
-
-        entidades = data.get('entities', [])
-        if not entidades:
-            break
-        usuario_ids.extend(u.get('id') for u in entidades if u.get('id'))
-
-        if page_number >= data.get('pageCount', 1):
-            break
-        page_number += 1
-
-    return usuario_ids
 
 
 def obtener_detalles_usuarios(token, api_domain, usuario_ids):

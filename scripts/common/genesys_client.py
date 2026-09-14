@@ -149,6 +149,41 @@ def solicitar_api_patch(token, api_domain, path, body):
         return response.json()
 
 
+def solicitar_api_put(token, api_domain, path, body):
+    """Hace un PUT autenticado (reemplazo completo del recurso, o bulk-add/remove
+    en los endpoints que lo usan así) contra la API de Genesys Cloud,
+    reintentando automáticamente en HTTP 429."""
+    url = f'https://{api_domain}{path}' if path.startswith('/') else f'https://{api_domain}/{path}'
+    headers = {'Authorization': f'Bearer {token}'}
+
+    while True:
+        response = requests.put(url, headers=headers, json=body)
+        if response.status_code == 429:
+            retry_after = int(response.headers.get('Retry-After', 5))
+            print(f"[!] Límite de peticiones alcanzado. Reintentando en {retry_after} segundos...")
+            time.sleep(retry_after)
+            continue
+        response.raise_for_status()
+        return response.json()
+
+
+def solicitar_api_delete(token, api_domain, path, params=None):
+    """Hace un DELETE autenticado contra la API de Genesys Cloud, reintentando
+    automáticamente en HTTP 429."""
+    url = f'https://{api_domain}{path}' if path.startswith('/') else f'https://{api_domain}/{path}'
+    headers = {'Authorization': f'Bearer {token}'}
+
+    while True:
+        response = requests.delete(url, headers=headers, params=params)
+        if response.status_code == 429:
+            retry_after = int(response.headers.get('Retry-After', 5))
+            print(f"[!] Límite de peticiones alcanzado. Reintentando en {retry_after} segundos...")
+            time.sleep(retry_after)
+            continue
+        response.raise_for_status()
+        return None if not response.content else response.json()
+
+
 def buscar_usuario_por_email(token, api_domain, email):
     """Busca un usuario por email exacto vía POST /api/v2/users/search.
     Devuelve el dict del usuario encontrado, o None si no hay coincidencia."""
@@ -208,6 +243,156 @@ def obtener_colas(token, api_domain):
         path = data.get('nextUri')
 
     return colas
+
+
+def buscar_cola_por_nombre(token, api_domain, nombre):
+    """Busca una cola por nombre exacto (sin distinguir mayúsculas/minúsculas).
+    Devuelve el dict de la cola, o None si no hay coincidencia."""
+    nombre_normalizado = nombre.strip().lower()
+    for cola in obtener_colas(token, api_domain):
+        if cola.get('name', '').strip().lower() == nombre_normalizado:
+            return cola
+    return None
+
+
+def buscar_script_por_nombre(token, api_domain, nombre):
+    """Busca un script por nombre exacto vía GET /api/v2/scripts?name=...
+    Devuelve el dict del script, o None si no hay coincidencia."""
+    data = solicitar_api(token, api_domain, '/api/v2/scripts', params={'name': nombre, 'pageSize': 25})
+    nombre_normalizado = nombre.strip().lower()
+    for script in data.get('entities', []):
+        if script.get('name', '').strip().lower() == nombre_normalizado:
+            return script
+    return None
+
+
+def buscar_wrapupcode_por_nombre(token, api_domain, nombre):
+    """Busca un wrap-up code por nombre exacto vía GET /api/v2/routing/wrapupcodes?name=...
+    Devuelve el dict del wrap-up code, o None si no hay coincidencia."""
+    data = solicitar_api(token, api_domain, '/api/v2/routing/wrapupcodes', params={'name': nombre, 'pageSize': 25})
+    nombre_normalizado = nombre.strip().lower()
+    for code in data.get('entities', []):
+        if code.get('name', '').strip().lower() == nombre_normalizado:
+            return code
+    return None
+
+
+def buscar_grupo_por_nombre(token, api_domain, nombre):
+    """Busca un grupo (Group) por nombre exacto vía POST /api/v2/groups/search.
+    Devuelve el dict del grupo (incluye 'version', necesario para modificar
+    su membership), o None si no hay coincidencia."""
+    body = {
+        'query': [{'type': 'EXACT', 'fields': ['name'], 'value': nombre}],
+        'pageSize': 1,
+    }
+    data = solicitar_api_post(token, api_domain, '/api/v2/groups/search', body)
+    resultados = data.get('results', [])
+    return resultados[0] if resultados else None
+
+
+def buscar_skill_por_nombre(token, api_domain, nombre):
+    """Busca una skill de enrutamiento por nombre exacto vía GET /api/v2/routing/skills?name=...
+    (el filtro del servidor es por prefijo, así que se valida el nombre exacto
+    del lado del cliente). Devuelve el dict de la skill, o None si no hay coincidencia."""
+    data = solicitar_api(token, api_domain, '/api/v2/routing/skills', params={'name': nombre, 'pageSize': 25})
+    nombre_normalizado = nombre.strip().lower()
+    for skill in data.get('entities', []):
+        if skill.get('name', '').strip().lower() == nombre_normalizado:
+            return skill
+    return None
+
+
+def obtener_roles(token, api_domain):
+    """Obtiene todos los roles de autorización de la organización."""
+    roles = []
+    page_number = 1
+
+    while True:
+        try:
+            data = solicitar_api(token, api_domain, '/api/v2/authorization/roles', params={
+                'pageSize': 100,
+                'pageNumber': page_number,
+            })
+        except requests.exceptions.RequestException as e:
+            print(f"❌ Error al obtener roles: {e}")
+            break
+
+        entidades = data.get('entities', [])
+        if not entidades:
+            break
+        roles.extend(entidades)
+
+        if page_number >= data.get('pageCount', 1):
+            break
+        page_number += 1
+
+    return roles
+
+
+def buscar_rol_por_nombre(token, api_domain, nombre):
+    """Busca un rol de autorización por nombre exacto (sin distinguir
+    mayúsculas/minúsculas). Devuelve el dict del rol, o None si no hay coincidencia."""
+    nombre_normalizado = nombre.strip().lower()
+    for rol in obtener_roles(token, api_domain):
+        if rol.get('name', '').strip().lower() == nombre_normalizado:
+            return rol
+    return None
+
+
+def obtener_usuarios_de_rol(token, api_domain, role_id):
+    """Obtiene los IDs de los usuarios asignados directamente a un rol."""
+    usuario_ids = []
+    page_number = 1
+
+    while True:
+        try:
+            data = solicitar_api(token, api_domain, f'/api/v2/authorization/roles/{role_id}/users', params={
+                'pageSize': 100,
+                'pageNumber': page_number,
+            })
+        except requests.exceptions.RequestException as e:
+            print(f"❌ Error al obtener usuarios del rol {role_id}: {e}")
+            break
+
+        entidades = data.get('entities', [])
+        if not entidades:
+            break
+        usuario_ids.extend(u.get('id') for u in entidades if u.get('id'))
+
+        if page_number >= data.get('pageCount', 1):
+            break
+        page_number += 1
+
+    return usuario_ids
+
+
+def obtener_contactos(token, api_domain):
+    """Obtiene todos los contactos externos de la organización, usando paginación."""
+    page_size = 100
+    page_number = 1
+    contactos_total = []
+
+    while True:
+        try:
+            data = solicitar_api(token, api_domain, '/api/v2/externalcontacts/contacts', params={
+                'pageSize': page_size,
+                'pageNumber': page_number,
+            })
+        except requests.exceptions.RequestException as e:
+            print(f"❌ Error al obtener contactos:\n{e}")
+            break
+
+        contactos = data.get('entities', [])
+        if not contactos:
+            break
+        contactos_total.extend(contactos)
+        print(f"✅ Página {page_number} procesada: {len(contactos)} contactos")
+
+        if page_number * page_size >= data.get('total', 0):
+            break
+        page_number += 1
+
+    return contactos_total
 
 
 def guardar_excel(dataframe, prefijo_archivo, region_nombre):

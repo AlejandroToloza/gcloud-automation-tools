@@ -119,7 +119,7 @@ def test_comando_bulk_sin_confirm_no_define_bulk_confirm(monkeypatch):
     assert valor_visto == {'confirm': None}
 
 
-@pytest.mark.parametrize('comando', ['update-users', 'set-user-state', 'update-division', 'reset-password'])
+@pytest.mark.parametrize('comando', sorted(cli.COMANDOS_BULK))
 def test_todos_los_comandos_bulk_aceptan_archivo_y_confirm(comando, monkeypatch):
     monkeypatch.delenv('BULK_ARCHIVO_CSV', raising=False)
     monkeypatch.delenv('BULK_CONFIRM', raising=False)
@@ -138,7 +138,7 @@ def test_todos_los_comandos_bulk_aceptan_archivo_y_confirm(comando, monkeypatch)
     assert valor_visto == {'archivo': 'cambios.csv', 'confirm': '1'}
 
 
-@pytest.mark.parametrize('comando', ['update-users', 'set-user-state', 'update-division', 'reset-password'])
+@pytest.mark.parametrize('comando', sorted(cli.COMANDOS_BULK))
 def test_cargar_main_carga_cada_script_bulk_real(comando):
     nombre_modulo, ruta_relativa, _ = cli.COMANDOS[comando]
     funcion_main = cli._cargar_main(nombre_modulo, ruta_relativa)

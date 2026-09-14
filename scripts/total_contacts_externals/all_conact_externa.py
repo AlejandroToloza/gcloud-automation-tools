@@ -2,40 +2,9 @@ import os
 import sys
 
 import pandas as pd
-import requests
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'common'))
-from genesys_client import seleccionar_region, solicitar_credenciales, obtener_token, solicitar_api, guardar_excel
-
-
-def obtener_contactos(token, api_domain):
-    """Obtiene todos los contactos externos disponibles usando paginación."""
-    page_size = 100
-    page_number = 1
-    contactos_total = []
-
-    while True:
-        try:
-            data = solicitar_api(token, api_domain, '/api/v2/externalcontacts/contacts', params={
-                'pageSize': page_size,
-                'pageNumber': page_number,
-            })
-        except requests.exceptions.RequestException as e:
-            print(f"❌ Error al obtener contactos:\n{e}")
-            break
-
-        contactos = data.get('entities', [])
-        if not contactos:
-            break
-
-        contactos_total.extend(contactos)
-        print(f"✅ Página {page_number} procesada: {len(contactos)} contactos")
-
-        if page_number * page_size >= data.get('total', 0):
-            break
-        page_number += 1
-
-    return contactos_total
+from genesys_client import seleccionar_region, solicitar_credenciales, obtener_token, obtener_contactos, guardar_excel
 
 
 def main():
