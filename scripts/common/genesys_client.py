@@ -161,6 +161,38 @@ def buscar_usuario_por_email(token, api_domain, email):
     return resultados[0] if resultados else None
 
 
+def obtener_divisiones(token, api_domain):
+    """Obtiene todas las divisiones de autorización de la organización."""
+    divisiones = []
+    page_number = 1
+
+    while True:
+        data = solicitar_api(token, api_domain, '/api/v2/authorization/divisions', params={
+            'pageSize': 100,
+            'pageNumber': page_number,
+        })
+        entidades = data.get('entities', [])
+        if not entidades:
+            break
+        divisiones.extend(entidades)
+
+        if page_number >= data.get('pageCount', 1):
+            break
+        page_number += 1
+
+    return divisiones
+
+
+def buscar_division_por_nombre(token, api_domain, nombre):
+    """Busca una división por nombre exacto (sin distinguir mayúsculas/minúsculas).
+    Devuelve el dict de la división, o None si no hay coincidencia."""
+    nombre_normalizado = nombre.strip().lower()
+    for division in obtener_divisiones(token, api_domain):
+        if division.get('name', '').strip().lower() == nombre_normalizado:
+            return division
+    return None
+
+
 def obtener_colas(token, api_domain):
     """Obtiene todas las colas de la organización, siguiendo la paginación por nextUri."""
     colas = []

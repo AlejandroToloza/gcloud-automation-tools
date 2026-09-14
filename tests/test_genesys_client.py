@@ -42,6 +42,42 @@ def test_solicitar_api_reintenta_en_rate_limit(requests_mock):
     assert requests_mock.call_count == 2
 
 
+def test_obtener_divisiones_pagina_hasta_pagecount(requests_mock):
+    requests_mock.get(
+        'https://api.mypurecloud.com/api/v2/authorization/divisions',
+        [
+            {'json': {'entities': [{'id': 'd1', 'name': 'Home'}], 'pageCount': 2}, 'status_code': 200},
+            {'json': {'entities': [{'id': 'd2', 'name': 'Ventas'}], 'pageCount': 2}, 'status_code': 200},
+        ],
+    )
+
+    divisiones = genesys_client.obtener_divisiones('token', 'api.mypurecloud.com')
+
+    assert [d['id'] for d in divisiones] == ['d1', 'd2']
+
+
+def test_buscar_division_por_nombre_encuentra_sin_distinguir_mayusculas(requests_mock):
+    requests_mock.get(
+        'https://api.mypurecloud.com/api/v2/authorization/divisions',
+        json={'entities': [{'id': 'd1', 'name': 'Ventas'}], 'pageCount': 1},
+    )
+
+    division = genesys_client.buscar_division_por_nombre('token', 'api.mypurecloud.com', 'ventas')
+
+    assert division == {'id': 'd1', 'name': 'Ventas'}
+
+
+def test_buscar_division_por_nombre_sin_coincidencia(requests_mock):
+    requests_mock.get(
+        'https://api.mypurecloud.com/api/v2/authorization/divisions',
+        json={'entities': [{'id': 'd1', 'name': 'Ventas'}], 'pageCount': 1},
+    )
+
+    division = genesys_client.buscar_division_por_nombre('token', 'api.mypurecloud.com', 'No Existe')
+
+    assert division is None
+
+
 def test_obtener_colas_sigue_nexturi(requests_mock):
     requests_mock.get(
         'https://api.mypurecloud.com/api/v2/routing/queues',

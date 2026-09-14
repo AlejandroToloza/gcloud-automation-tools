@@ -39,11 +39,26 @@ COMANDOS = {
         'scripts/bulk_actualizar_usuarios/actualizar_usuarios.py',
         'Actualiza department/title de usuarios en bulk desde un CSV (vista previa por defecto).',
     ),
+    'set-user-state': (
+        'activar_desactivar',
+        'scripts/bulk_activar_desactivar/activar_desactivar.py',
+        'Activa o desactiva usuarios en bulk desde un CSV (vista previa por defecto).',
+    ),
+    'update-division': (
+        'reasignar_division',
+        'scripts/bulk_reasignar_division/reasignar_division.py',
+        'Reasigna la división de usuarios en bulk desde un CSV (vista previa por defecto).',
+    ),
+    'reset-password': (
+        'reset_password',
+        'scripts/bulk_reset_password/reset_password.py',
+        'Fija una contraseña temporal nueva a usuarios en bulk desde un CSV (vista previa por defecto).',
+    ),
 }
 
 # Subcomandos que ESCRIBEN en la organización (no son de solo lectura) y por
 # lo tanto aceptan --archivo/--confirm además de --region.
-COMANDOS_BULK = {'update-users'}
+COMANDOS_BULK = {'update-users', 'set-user-state', 'update-division', 'reset-password'}
 
 
 def _cargar_main(nombre_modulo, ruta_relativa):

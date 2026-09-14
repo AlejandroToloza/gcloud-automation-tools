@@ -18,6 +18,9 @@ Bienvenido a `gcloud-automation-tools`, una colección de scripts y herramientas
 | [Total contacts externals](./scripts/total_contacts_externals/README.md) | Devuelve el total de contactos externos creados en la organización. | ✅ Disponible |
 | [Agentes por roles](./scripts/agentes_por_roles/README.md) | Muestra los agentes agrupados por rol, junto con el ID de cada rol. | ✅ Disponible |
 | [Actualizar usuarios en bulk](./scripts/bulk_actualizar_usuarios/README.md) ✍️ | Actualiza department/title de usuarios en bulk desde un CSV (escribe en tu organización). | ✅ Disponible |
+| [Activar/desactivar usuarios en bulk](./scripts/bulk_activar_desactivar/README.md) ✍️ | Activa o desactiva cuentas de usuario en bulk desde un CSV (escribe en tu organización). | ✅ Disponible |
+| [Reasignar división en bulk](./scripts/bulk_reasignar_division/README.md) ✍️ | Cambia la división de usuarios en bulk desde un CSV (escribe en tu organización). | ✅ Disponible |
+| [Reset de contraseña en bulk](./scripts/bulk_reset_password/README.md) ✍️ | Fija una contraseña temporal nueva a usuarios en bulk desde un CSV (escribe en tu organización). | ✅ Disponible |
 
 ---
 
@@ -62,7 +65,10 @@ gcloud-tools queue-scripts
 gcloud-tools queue-members
 gcloud-tools external-contacts
 gcloud-tools roles
-gcloud-tools update-users --archivo cambios.csv   # ✍️ escribe — ver más abajo
+gcloud-tools update-users --archivo cambios.csv     # ✍️ escribe — ver más abajo
+gcloud-tools set-user-state --archivo cambios.csv   # ✍️ escribe
+gcloud-tools update-division --archivo cambios.csv  # ✍️ escribe
+gcloud-tools reset-password --archivo cambios.csv   # ✍️ escribe
 ```
 
 Cualquier subcomando acepta `--region` para saltar el menú interactivo (equivale a definir `GENESYS_REGION`):
@@ -77,14 +83,19 @@ Cada subcomando ejecuta exactamente el mismo script que su equivalente en `scrip
 
 ## ✍️ Operaciones de escritura (bulk)
 
-A diferencia de las automatizaciones de arriba (todas de solo lectura/exportación), `update-users` **escribe** en tu organización de Genesys Cloud. Es el primero de varios scripts de bulk-write planeados para este repositorio, y todos comparten el mismo modelo de seguridad:
+A diferencia de las automatizaciones de arriba (todas de solo lectura/exportación), estos scripts **escriben** en tu organización de Genesys Cloud. Todos comparten el mismo modelo de seguridad:
 
 - **Vista previa por defecto**: sin `--confirm` (o `BULK_CONFIRM=1`), el script solo muestra qué cambiaría y no toca nada.
-- **Backup automático** del estado "antes", guardado como Excel antes de escribir.
+- **Backup automático** del estado "antes", guardado como Excel antes de escribir (excepto reset de contraseña, que no tiene un "antes" legible para respaldar).
 - **Un error en una fila no cancela el resto** del lote — se registra y se sigue.
 - **Log de auditoría**: qué se aplicó, cuándo, con qué resultado, fila por fila.
 
-Detalle completo, formato del CSV y ejemplos en [scripts/bulk_actualizar_usuarios/README.md](./scripts/bulk_actualizar_usuarios/README.md).
+| Comando | Qué hace | Detalle |
+|---|---|---|
+| `update-users` | Actualiza department/title | [README](./scripts/bulk_actualizar_usuarios/README.md) |
+| `set-user-state` | Activa/desactiva usuarios | [README](./scripts/bulk_activar_desactivar/README.md) |
+| `update-division` | Reasigna división | [README](./scripts/bulk_reasignar_division/README.md) |
+| `reset-password` | Fija contraseña temporal nueva | [README](./scripts/bulk_reset_password/README.md) — leé la nota de seguridad antes de usarlo |
 
 ---
 
@@ -100,7 +111,10 @@ gcloud-automation-tools/
 │   ├── colas_tipo_y_script/
 │   ├── miembros_por_cola/
 │   ├── total_contacts_externals/
-│   └── bulk_actualizar_usuarios/ # ✍️ Escribe en la organización (ver más abajo)
+│   ├── bulk_actualizar_usuarios/  # ✍️ Escribe en la organización (ver más abajo)
+│   ├── bulk_activar_desactivar/   # ✍️
+│   ├── bulk_reasignar_division/   # ✍️
+│   └── bulk_reset_password/       # ✍️
 ├── tests/                       # Tests automatizados (pytest)
 ├── .env.example
 ├── pyproject.toml
