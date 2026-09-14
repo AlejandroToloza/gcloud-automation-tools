@@ -31,6 +31,17 @@ pip install -r requirements.txt
 
 > 📌 Asegúrate de estar en la carpeta raíz del repositorio antes de ejecutar ese comando.
 
+### 🔐 Credenciales (opcional, recomendado para automatizar)
+
+Por defecto, cada script te pide el `Client ID` y `Client Secret` por consola. Si prefieres no escribirlos cada vez (por ejemplo, para correr los scripts desde una tarea programada), puedes definirlos como variables de entorno:
+
+```bash
+cp .env.example .env
+# Edita .env y completa tus credenciales
+```
+
+Si el archivo `.env` existe, los scripts lo leen automáticamente y se saltan la pregunta por consola. `.env` está en `.gitignore`: nunca se sube al repositorio.
+
 ---
 
 ## 📂 Estructura del repositorio
@@ -44,9 +55,23 @@ gcloud-automation-tools/
 │   ├── colas_tipo_y_script/
 │   ├── miembros_por_cola/
 │   └── total_contacts_externals/
+├── tests/                       # Tests automatizados (pytest)
+├── .env.example
 ├── requirements.txt
+├── requirements-dev.txt
 ├── LICENSE
 └── README.md
+```
+
+---
+
+## ✅ Tests
+
+Este proyecto usa `pytest` con `requests-mock` para probar la lógica de cada script (paginación, reintentos por límite de peticiones, autenticación) sin necesitar credenciales reales ni conexión a Genesys Cloud.
+
+```bash
+pip install -r requirements-dev.txt
+pytest
 ```
 
 ---

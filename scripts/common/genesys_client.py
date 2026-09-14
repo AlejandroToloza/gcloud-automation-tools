@@ -8,6 +8,12 @@ from getpass import getpass
 
 import requests
 
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
+
 REGIONES = {
     '1': ('mypurecloud.com', 'Estados Unidos (Este)', 'login.mypurecloud.com', 'api.mypurecloud.com'),
     '2': ('usw2.pure.cloud', 'Estados Unidos (Oeste)', 'login.usw2.pure.cloud', 'api.usw2.pure.cloud'),
@@ -36,7 +42,15 @@ def seleccionar_region():
 
 
 def solicitar_credenciales():
-    """Pide Client ID y Client Secret por consola (el secret no se muestra en pantalla)."""
+    """Obtiene Client ID y Client Secret desde las variables de entorno
+    GENESYS_CLIENT_ID / GENESYS_CLIENT_SECRET (o un archivo .env), y si no
+    están definidas, las pide por consola (el secret no se muestra en pantalla)."""
+    client_id = os.environ.get('GENESYS_CLIENT_ID', '').strip()
+    client_secret = os.environ.get('GENESYS_CLIENT_SECRET', '').strip()
+    if client_id and client_secret:
+        print("🔐 Credenciales cargadas desde variables de entorno (GENESYS_CLIENT_ID / GENESYS_CLIENT_SECRET).")
+        return client_id, client_secret
+
     client_id = input("Ingrese el CLIENT ID: ").strip()
     print("🔐 NOTA: Al escribir el CLIENT SECRET no verás nada en pantalla (por seguridad).")
     client_secret = getpass("Ingrese el CLIENT SECRET (oculto): ").strip()

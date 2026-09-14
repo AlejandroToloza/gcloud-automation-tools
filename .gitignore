@@ -4,6 +4,10 @@ __pycache__/
 .venv/
 venv/
 env/
+.pytest_cache/
+
+# Credenciales
+.env
 
 # Editores / SO
 .vscode/
