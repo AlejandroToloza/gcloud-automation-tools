@@ -53,7 +53,7 @@ python scripts/export_all_users/export_all_users.py
 
 ## El archivo se guardará automáticamente en tu escritorio, en la ruta:
 
-**Escritorio/PYTHON/EXPORTS/usuarios_genesys_YYYYMMDD_HHMMSS.xlsx**
+**Escritorio/PYTHON/EXPORTS/usuarios_genesys_{region}_YYYYMMDD_HHMMSS.xlsx**
 
 ---
 

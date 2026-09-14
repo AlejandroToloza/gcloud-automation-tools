@@ -38,6 +38,7 @@ pip install -r requirements.txt
 ```
 gcloud-automation-tools/
 ├── scripts/
+│   ├── common/                  # Módulo compartido (auth, regiones, export a Excel)
 │   ├── export_all_users/
 │   ├── agentes_por_roles/
 │   ├── colas_tipo_y_script/
