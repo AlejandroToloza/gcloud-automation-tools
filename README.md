@@ -56,6 +56,21 @@ Si el archivo `.env` existe, los scripts lo leen automáticamente y se saltan **
 
 > ⚠️ Definir solo `GENESYS_CLIENT_ID`/`GENESYS_CLIENT_SECRET` sin `GENESYS_REGION` no alcanza para una ejecución 100% desatendida: el script igual se quedará esperando que elijas la región por consola.
 
+**¿Qué número va en `GENESYS_REGION` / `--region`?** El que corresponde a la región de tu organización:
+
+| Nº | Región                    | Dominio de API              |
+|----|---------------------------|------------------------------|
+| 1  | 🇺🇸 Estados Unidos (Este)  | `api.mypurecloud.com`        |
+| 2  | 🇺🇸 Estados Unidos (Oeste) | `api.usw2.pure.cloud`        |
+| 3  | 🇨🇦 Canadá                 | `api.cac1.pure.cloud`        |
+| 4  | 🇧🇷 Brasil (São Paulo)     | `api.sae1.pure.cloud`        |
+| 5  | 🇮🇪 Irlanda (Dublín)       | `api.mypurecloud.ie`         |
+| 6  | 🇩🇪 Alemania (Fráncfort)   | `api.mypurecloud.de`         |
+| 7  | 🇯🇵 Japón (Tokio)          | `api.mypurecloud.jp`         |
+| 8  | 🇦🇺 Australia (Sydney)     | `api.mypurecloud.com.au`     |
+
+> Si no la sabés de memoria, corré cualquier script sin `GENESYS_REGION`/`--region`: te muestra esta misma lista por consola para que elijas.
+
 ### 🚀 CLI único (opcional)
 
 En vez de recordar la ruta de cada script, puedes instalar el repositorio como herramienta y usar un solo comando:

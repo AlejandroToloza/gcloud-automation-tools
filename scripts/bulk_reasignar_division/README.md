@@ -34,6 +34,21 @@ Si el nombre de la división no existe exactamente (no distingue mayúsculas/min
 
 ---
 
+## 🌍 Regiones disponibles
+
+| Nº | Región                    | Dominio de API              |
+|----|---------------------------|------------------------------|
+| 1  | 🇺🇸 Estados Unidos (Este)  | `api.mypurecloud.com`        |
+| 2  | 🇺🇸 Estados Unidos (Oeste) | `api.usw2.pure.cloud`        |
+| 3  | 🇨🇦 Canadá                 | `api.cac1.pure.cloud`        |
+| 4  | 🇧🇷 Brasil (São Paulo)     | `api.sae1.pure.cloud`        |
+| 5  | 🇮🇪 Irlanda (Dublín)       | `api.mypurecloud.ie`         |
+| 6  | 🇩🇪 Alemania (Fráncfort)   | `api.mypurecloud.de`         |
+| 7  | 🇯🇵 Japón (Tokio)          | `api.mypurecloud.jp`         |
+| 8  | 🇦🇺 Australia (Sydney)     | `api.mypurecloud.com.au`     |
+
+---
+
 ## 🙋‍♂️ Autor
 
 **Arley Alejandro Toloza Martínez**  
