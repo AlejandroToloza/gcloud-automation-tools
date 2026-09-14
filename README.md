@@ -23,6 +23,8 @@ Bienvenido a `gcloud-automation-tools`, una colección de scripts y herramientas
 | [Reset de contraseña en bulk](./scripts/bulk_reset_password/README.md) ✍️ | Fija una contraseña temporal nueva a usuarios en bulk desde un CSV (escribe en tu organización). | ✅ Disponible |
 | [Script/IVR de colas en bulk](./scripts/bulk_actualizar_script_cola/README.md) ✍️ | Actualiza el script por defecto de colas en bulk desde un CSV (escribe en tu organización). | ✅ Disponible |
 | [Wrap-up codes de colas en bulk](./scripts/bulk_wrapupcodes_cola/README.md) ✍️ | Agrega/quita wrap-up codes de colas en bulk desde un CSV (escribe en tu organización). | ✅ Disponible |
+| [Migrar rol en bulk](./scripts/bulk_migrar_rol/README.md) ✍️ | Migra usuarios de un rol de autorización a otro en bulk (escribe en tu organización). | ✅ Disponible |
+| [Membership de grupos en bulk](./scripts/bulk_grupos_membership/README.md) ✍️ | Agrega/quita usuarios de un Group en bulk desde un CSV (escribe en tu organización). | ✅ Disponible |
 
 ---
 
@@ -73,6 +75,8 @@ gcloud-tools update-division --archivo cambios.csv  # ✍️ escribe
 gcloud-tools reset-password --archivo cambios.csv   # ✍️ escribe
 gcloud-tools update-queue-script --archivo cambios.csv       # ✍️ escribe
 gcloud-tools update-queue-wrapupcodes --archivo cambios.csv  # ✍️ escribe
+gcloud-tools migrate-role --archivo cambios.csv          # ✍️ escribe
+gcloud-tools update-group-members --archivo cambios.csv  # ✍️ escribe
 ```
 
 Cualquier subcomando acepta `--region` para saltar el menú interactivo (equivale a definir `GENESYS_REGION`):
@@ -102,6 +106,8 @@ A diferencia de las automatizaciones de arriba (todas de solo lectura/exportaci�
 | `reset-password` | Fija contraseña temporal nueva | [README](./scripts/bulk_reset_password/README.md) — leé la nota de seguridad antes de usarlo |
 | `update-queue-script` | Script/IVR por defecto de colas | [README](./scripts/bulk_actualizar_script_cola/README.md) |
 | `update-queue-wrapupcodes` | Wrap-up codes de colas | [README](./scripts/bulk_wrapupcodes_cola/README.md) |
+| `migrate-role` | Migra usuarios de un rol a otro | [README](./scripts/bulk_migrar_rol/README.md) |
+| `update-group-members` | Membership de Groups | [README](./scripts/bulk_grupos_membership/README.md) |
 
 ---
 
@@ -122,7 +128,9 @@ gcloud-automation-tools/
 │   ├── bulk_reasignar_division/   # ✍️
 │   ├── bulk_reset_password/       # ✍️
 │   ├── bulk_actualizar_script_cola/  # ✍️
-│   └── bulk_wrapupcodes_cola/        # ✍️
+│   ├── bulk_wrapupcodes_cola/        # ✍️
+│   ├── bulk_migrar_rol/              # ✍️
+│   └── bulk_grupos_membership/       # ✍️
 ├── tests/                       # Tests automatizados (pytest)
 ├── .env.example
 ├── pyproject.toml

@@ -64,6 +64,16 @@ COMANDOS = {
         'scripts/bulk_wrapupcodes_cola/wrapupcodes_cola.py',
         'Agrega/quita wrap-up codes de colas en bulk desde un CSV (vista previa por defecto).',
     ),
+    'migrate-role': (
+        'migrar_rol',
+        'scripts/bulk_migrar_rol/migrar_rol.py',
+        'Migra usuarios de un rol de autorización a otro en bulk (vista previa por defecto).',
+    ),
+    'update-group-members': (
+        'grupos_membership',
+        'scripts/bulk_grupos_membership/grupos_membership.py',
+        'Agrega/quita usuarios de un Group en bulk desde un CSV (vista previa por defecto).',
+    ),
 }
 
 # Subcomandos que ESCRIBEN en la organización (no son de solo lectura) y por
@@ -71,6 +81,7 @@ COMANDOS = {
 COMANDOS_BULK = {
     'update-users', 'set-user-state', 'update-division', 'reset-password',
     'update-queue-script', 'update-queue-wrapupcodes',
+    'migrate-role', 'update-group-members',
 }
 
 
