@@ -1,5 +1,7 @@
 # 🛠️ Genesys Cloud Automation Tools
 
+[![Tests](https://github.com/AlejandroToloza/gcloud-automation-tools/actions/workflows/tests.yml/badge.svg)](https://github.com/AlejandroToloza/gcloud-automation-tools/actions/workflows/tests.yml)
+
 Bienvenido a `gcloud-automation-tools`, una colección de scripts y herramientas en Python para automatizar tareas comunes en Genesys Cloud.
 
 🔍 Este repositorio está enfocado en aumentar la eficiencia de áreas como soporte, administración de usuarios, auditoría, y operaciones dentro del ecosistema Genesys Cloud, aprovechando sus APIs oficiales.
