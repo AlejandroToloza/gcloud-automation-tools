@@ -25,6 +25,8 @@ Bienvenido a `gcloud-automation-tools`, una colección de scripts y herramientas
 | [Wrap-up codes de colas en bulk](./scripts/bulk_wrapupcodes_cola/README.md) ✍️ | Agrega/quita wrap-up codes de colas en bulk desde un CSV (escribe en tu organización). | ✅ Disponible |
 | [Migrar rol en bulk](./scripts/bulk_migrar_rol/README.md) ✍️ | Migra usuarios de un rol de autorización a otro en bulk (escribe en tu organización). | ✅ Disponible |
 | [Membership de grupos en bulk](./scripts/bulk_grupos_membership/README.md) ✍️ | Agrega/quita usuarios de un Group en bulk desde un CSV (escribe en tu organización). | ✅ Disponible |
+| [Skills de enrutamiento en bulk](./scripts/bulk_skills_agentes/README.md) ✍️ | Agrega/quita skills de enrutamiento de agentes en bulk desde un CSV (escribe en tu organización). | ✅ Disponible |
+| [Limpieza de contactos externos en bulk](./scripts/bulk_limpieza_contactos/README.md) ✍️ | Elimina contactos externos en bulk desde un CSV de IDs (escribe en tu organización). | ✅ Disponible |
 
 ---
 
@@ -77,6 +79,8 @@ gcloud-tools update-queue-script --archivo cambios.csv       # ✍️ escribe
 gcloud-tools update-queue-wrapupcodes --archivo cambios.csv  # ✍️ escribe
 gcloud-tools migrate-role --archivo cambios.csv          # ✍️ escribe
 gcloud-tools update-group-members --archivo cambios.csv  # ✍️ escribe
+gcloud-tools update-skills --archivo cambios.csv     # ✍️ escribe
+gcloud-tools delete-contacts --archivo cambios.csv   # ✍️ escribe — borra datos, ver README
 ```
 
 Cualquier subcomando acepta `--region` para saltar el menú interactivo (equivale a definir `GENESYS_REGION`):
@@ -108,6 +112,8 @@ A diferencia de las automatizaciones de arriba (todas de solo lectura/exportaci�
 | `update-queue-wrapupcodes` | Wrap-up codes de colas | [README](./scripts/bulk_wrapupcodes_cola/README.md) |
 | `migrate-role` | Migra usuarios de un rol a otro | [README](./scripts/bulk_migrar_rol/README.md) |
 | `update-group-members` | Membership de Groups | [README](./scripts/bulk_grupos_membership/README.md) |
+| `update-skills` | Skills de enrutamiento | [README](./scripts/bulk_skills_agentes/README.md) |
+| `delete-contacts` | Elimina contactos externos | [README](./scripts/bulk_limpieza_contactos/README.md) — la única que borra datos permanentemente |
 
 ---
 
@@ -129,8 +135,10 @@ gcloud-automation-tools/
 │   ├── bulk_reset_password/       # ✍️
 │   ├── bulk_actualizar_script_cola/  # ✍️
 │   ├── bulk_wrapupcodes_cola/        # ✍️
-│   ├── bulk_migrar_rol/              # ✍️
-│   └── bulk_grupos_membership/       # ✍️
+│   ├── bulk_migrar_rol/               # ✍️
+│   ├── bulk_grupos_membership/        # ✍️
+│   ├── bulk_skills_agentes/           # ✍️
+│   └── bulk_limpieza_contactos/       # ✍️ Borra datos permanentemente
 ├── tests/                       # Tests automatizados (pytest)
 ├── .env.example
 ├── pyproject.toml

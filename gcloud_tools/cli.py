@@ -74,6 +74,16 @@ COMANDOS = {
         'scripts/bulk_grupos_membership/grupos_membership.py',
         'Agrega/quita usuarios de un Group en bulk desde un CSV (vista previa por defecto).',
     ),
+    'update-skills': (
+        'skills_agentes',
+        'scripts/bulk_skills_agentes/skills_agentes.py',
+        'Agrega/quita skills de enrutamiento de usuarios en bulk desde un CSV (vista previa por defecto).',
+    ),
+    'delete-contacts': (
+        'limpieza_contactos',
+        'scripts/bulk_limpieza_contactos/limpieza_contactos.py',
+        'Elimina contactos externos en bulk desde un CSV de IDs (vista previa por defecto).',
+    ),
 }
 
 # Subcomandos que ESCRIBEN en la organización (no son de solo lectura) y por
@@ -82,6 +92,7 @@ COMANDOS_BULK = {
     'update-users', 'set-user-state', 'update-division', 'reset-password',
     'update-queue-script', 'update-queue-wrapupcodes',
     'migrate-role', 'update-group-members',
+    'update-skills', 'delete-contacts',
 }
 
 
